@@ -1,31 +1,32 @@
-from fastapi import APIRouter
-from schemas.company import CompanyCreate , CompanyUpdate
+from fastapi import APIRouter , HTTPException , Depends , status
+from schemas.company import CompanyCreate , CompanyUpdate , CompanyResponse
+from models import company,job
+from sqlalchemy.orm import Session
+from database import get_db,SessionLocal 
+
 
 router =  APIRouter(prefix = "/company",tags=["company"])
-companies = []
 
-@router.post("/")
-def create_company(company : CompanyCreate):
-    companies.append(company)
-    return companies
 
-@router.get("/")
-def get_all_company():
-    return companies
+@router.post("/",status_code=status.HTTP_201_CREATED,response_model=CompanyResponse)
+def create_company(company : CompanyCreate,db:Session=Depends(get_db)):
+    pass
 
-@router.get("/{company_id}")
-def get_company(company_id:int):
-    return companies[company_id]
+@router.get("/",status_code=status.HTTP_200_OK,response_model=list[CompanyResponse])
+def get_all_company(db:Session=Depends(get_db)):
+    pass
 
-@router.put("/{company_id}")
+@router.get("/{company_id}",status_code=status.HTTP_200_OK,response_model=CompanyResponse)
+def get_company(company_id:int,db:Session=Depends(get_db)):
+    pass
+
+@router.put("/{company_id}",status_code=status.HTTP_201_CREATED)
 def update_company(company_id: int,company: CompanyUpdate):
-    companies[company_id] = company
-    return companies
+    pass
 
-@router.delete("/{company_id}")
-def delete_company(company_id: int):
-    companies.pop(company_id)
-    return companies
+@router.delete("/{company_id}",status_code=status.HTTP_204_NO_CONTENT)
+def delete_company(company_id: int,db:Session=Depends(get_db)):
+    pass
 
 #@router.get("/")
 #def read_company():
@@ -35,3 +36,4 @@ def delete_company(company_id: int):
 #def read_company(company_id: int):
 #    return {"company_id": company_id}
 #
+
