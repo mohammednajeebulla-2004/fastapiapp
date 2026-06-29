@@ -47,7 +47,6 @@ def update_job(job_id: int, job: JobUpdate, db: Session = Depends(get_db)):
 
     for key, value in job.dict().items():
         setattr(db_job, key, value)
-
     db.commit()
     db.refresh(db_job)
 
