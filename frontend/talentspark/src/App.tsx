@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 import CompanyCard from "./components/CompanyCard";
 import JobCard from "./components/JobCard";
 import {useEffect, useState} from "react";
-import { getCompanies } from "./Services/CompanyService";
+import { getCompany} from "./Services/CompanyService";
 import type {Company} from "./types/company";
 
 
@@ -17,7 +17,7 @@ function App()
   async function fetchCompanies() {
     setLoading(true);
     try {
-      const companies = await getCompanies();
+      const companies = await getCompany();
       setCompanies(companies);
     } catch (error) {
       setError(error as Error);
