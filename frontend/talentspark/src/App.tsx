@@ -17,8 +17,8 @@ function App()
   async function fetchCompanies() {
     setLoading(true);
     try {
-      const companies = await getCompany();
-      setCompanies(companies);
+      const company = await getCompany(0);
+      setCompanies([company]);
     } catch (error) {
       setError(error as Error);
     } finally {
@@ -40,7 +40,11 @@ function App()
     <Welcome/>
     <br />
     <CompanyCard
-    companies={companies}/>
+      companies={companies}
+      onedit={() => {}}
+      ondelete={() => {}}
+      onadd={() => {}}
+    />
     <JobCard/>
     <Footer/>
     </>
