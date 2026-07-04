@@ -10,8 +10,15 @@ from sqlalchemy.orm import Session
 
 
 load_dotenv()
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
+# Provide safe defaults for development; prefer setting these in backend/.env
+SECRET_KEY = os.getenv("SECRET_KEY") or os.getenv("SECRET", None)
+if SECRET_KEY:
+    SECRET_KEY = SECRET_KEY.strip()
+ALGORITHM = os.getenv("ALGORITHM") or "HS256"
+
+if not SECRET_KEY:
+    # Fallback development key to avoid obscure runtime errors. Replace in production.
+    SECRET_KEY = "dev_secret_key"
 
 def create_access_token(data:dict,expires_delta: timedelta = timedelta(hours=2)):
     to_encode = data.copy()
