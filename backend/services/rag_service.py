@@ -27,5 +27,5 @@ def rag_job_search(question: str) -> str:
         f"- {r['title']}: {r['description']} (Salary: {r['salary']}, Match:{r['score']})" 
         for r in results
     ])
-    response = rag_chain.invoke({"contxt":context,"question":question})
+    response = rag_chain.invoke({"context":context,"question":question})
     return response.content
