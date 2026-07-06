@@ -1,0 +1,28 @@
+nav ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    padding: 12px 25px;
+    margin: 0;
+}
+
+nav ul li {
+    margin-right: 25px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.logout-btn {
+    background: #6b7280;      /* Gray */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background: #4b5563;      /* Dark Gray */
+}

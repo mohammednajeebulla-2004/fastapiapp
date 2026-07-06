@@ -5,10 +5,17 @@ import CompanyCard from "./components/CompanyCard";
 import JobCard from "./components/JobCard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import { useEffect, useState } from "react";
-import { getCompanies, createCompany, updateCompany, deleteCompany } from "./Services/CompanyService";
+import { useEffect, useState, type ComponentType } from "react";
+import {
+  getCompanies,
+  createCompany,
+  updateCompany,
+  deleteCompany,
+} from "./Services/CompanyService";
 import type { Company } from "./types/company";
+import ChatWidget from "./components/ChatWidget";
 
+const NavBarComponent = NavBar as ComponentType<{ onLogout: () => void }>;
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -25,19 +32,21 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
+    if (!token) return;
 
     async function fetchCompanies() {
       setLoading(true);
       setError(null);
+
       try {
         const companiesResponse = await getCompanies();
         setCompanies(companiesResponse);
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
+        const errorMessage =
+          err instanceof Error ? err.message : String(err);
+
         setError(errorMessage);
+
         if (errorMessage.includes("401")) {
           localStorage.removeItem("token");
           setToken(null);
@@ -55,12 +64,16 @@ function App() {
     setToken(newToken);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+  };
+
   const handleAddCompany = async (company: Company) => {
     try {
       const created = await createCompany(company);
       setCompanies((prev) => [...prev, created]);
     } catch (err) {
-      console.error("Failed to add company", err);
       setError(err instanceof Error ? err.message : String(err));
     }
   };
@@ -69,14 +82,15 @@ function App() {
     try {
       if (company.id && company.id > 0) {
         const updated = await updateCompany(company.id, company);
-        setCompanies((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
+
+        setCompanies((prev) =>
+          prev.map((c) => (c.id === updated.id ? updated : c))
+        );
       } else {
-        // fallback to create if id is not provided
         const created = await createCompany(company);
         setCompanies((prev) => [...prev, created]);
       }
     } catch (err) {
-      console.error("Failed to edit company", err);
       setError(err instanceof Error ? err.message : String(err));
     }
   };
@@ -86,19 +100,22 @@ function App() {
       await deleteCompany(id);
       setCompanies((prev) => prev.filter((c) => c.id !== id));
     } catch (err) {
-      console.error("Failed to delete company", err);
       setError(err instanceof Error ? err.message : String(err));
     }
   };
 
   const handleShowRegister = () => setShowRegister(true);
+
   const handleShowLogin = () => setShowRegister(false);
 
   if (!token) {
     return showRegister ? (
       <Register onSwitchToLogin={handleShowLogin} />
     ) : (
-      <Login onLogin={handleLogin} onSwitchToRegister={handleShowRegister} />
+      <Login
+        onLogin={handleLogin}
+        onSwitchToRegister={handleShowRegister}
+      />
     );
   }
 
@@ -112,14 +129,26 @@ function App() {
 
   return (
     <>
-      <NavBar />
+      <NavBar onLogout={handleLogout} />
+
       <Welcome />
+
       <br />
-      <CompanyCard companies={companies} onedit={handleEditCompany} ondelete={handleDeleteCompany} onadd={handleAddCompany} />
+
+      <CompanyCard
+        companies={companies}
+        onedit={handleEditCompany}
+        ondelete={handleDeleteCompany}
+        onadd={handleAddCompany}
+      />
+
       <JobCard />
+
       <Footer />
+
+      <ChatWidget />
     </>
   );
 }
 
-export default App
+export default App;
