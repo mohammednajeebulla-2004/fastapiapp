@@ -5,6 +5,7 @@ import CompanyCard from "./components/CompanyCard";
 import JobCard from "./components/JobCard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import DiscoverJobs from "./components/DiscoverJobs/DiscoverJobs";
 import { useEffect, useState, type ComponentType } from "react";
 import {
   getCompanies,
@@ -128,27 +129,33 @@ function App() {
   }
 
   return (
-    <>
-      <NavBar onLogout={handleLogout} />
+  <div className="app-container">
+    <NavBar onLogout={handleLogout} />
 
+    <main className="main-content">
       <Welcome />
 
-      <br />
+      <DiscoverJobs />
 
-      <CompanyCard
-        companies={companies}
-        onedit={handleEditCompany}
-        ondelete={handleDeleteCompany}
-        onadd={handleAddCompany}
-      />
+      <section className="section">
+        <CompanyCard
+          companies={companies}
+          onedit={handleEditCompany}
+          ondelete={handleDeleteCompany}
+          onadd={handleAddCompany}
+        />
+      </section>
 
-      <JobCard />
+      <section className="section">
+        <JobCard />
+      </section>
+    </main>
 
-      <Footer />
+    <Footer />
 
-      <ChatWidget />
-    </>
-  );
+    <ChatWidget />
+  </div>
+);
 }
 
 export default App;

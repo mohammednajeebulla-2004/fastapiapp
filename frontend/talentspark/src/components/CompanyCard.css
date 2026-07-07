@@ -1,0 +1,171 @@
+.company-wrapper {
+  width: 90%;
+  max-width: 1200px;
+  margin: 40px auto;
+}
+
+.company-title {
+  color: #ffffff;
+  font-size: 32px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.company-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+.company-card {
+  background: #1e293b;
+  color: #f8fafc;
+  border-radius: 15px;
+  padding: 20px;
+  border: 1px solid #334155;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transition: 0.3s;
+}
+
+.company-card:hover {
+  transform: translateY(-5px);
+  border-color: #3b82f6;
+}
+
+.company-name {
+  color: #38bdf8;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.company-card p {
+  margin: 8px 0;
+  color: #cbd5e1;
+  font-size: 15px;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edit-form input,
+.add-company input {
+  width: 100%;
+  padding: 12px;
+  background: #0f172a;
+  color: white;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.edit-form input::placeholder,
+.add-company input::placeholder {
+  color: #94a3b8;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.button-row button {
+  flex: 1;
+}
+
+.edit-btn,
+.save-btn {
+  background: #2563eb;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.edit-btn:hover,
+.save-btn:hover {
+  background: #1d4ed8;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}
+
+.cancel-btn {
+  background: #64748b;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: #475569;
+}
+
+.add-company {
+  margin-top: 40px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 15px;
+  padding: 25px;
+}
+
+.add-company h2 {
+  color: white;
+  margin-bottom: 20px;
+}
+
+.add-company input {
+  margin-bottom: 15px;
+}
+
+.add-btn {
+  width: 100%;
+  background: #22c55e;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add-btn:hover {
+  background: #16a34a;
+}
+
+@media (max-width: 768px) {
+  .company-wrapper {
+    width: 95%;
+  }
+
+  .company-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .company-title {
+    font-size: 26px;
+  }
+
+  .button-row {
+    flex-direction: column;
+  }
+}

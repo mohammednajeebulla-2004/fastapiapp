@@ -1,0 +1,111 @@
+.discover-page {
+    width: 90%;
+    max-width: 1200px;
+    margin: 50px auto;
+    color: #f8fafc;
+}
+
+.discover-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.discover-header h2 {
+    font-size: 2.3rem;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.discover-header p {
+    max-width: 700px;
+    margin: auto;
+    color: #94a3b8;
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+.discover-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 35px;
+}
+
+.discover-tabs button {
+    background: #1e293b;
+    color: #cbd5e1;
+    border: 1px solid #334155;
+    padding: 12px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .3s;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.discover-tabs button:hover {
+    background: #2563eb;
+    color: white;
+}
+
+.active-tab {
+    background: #2563eb !important;
+    color: white !important;
+    border-color: #2563eb !important;
+}
+
+.discover-content {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 15px;
+    padding: 30px;
+    min-height: 500px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.25);
+}
+
+/* Tablet */
+
+@media (max-width:900px){
+
+.discover-header h2{
+font-size:2rem;
+}
+
+.discover-content{
+padding:25px;
+}
+
+}
+
+/* Mobile */
+
+@media (max-width:768px){
+
+.discover-page{
+width:95%;
+margin:30px auto;
+}
+
+.discover-header h2{
+font-size:1.8rem;
+}
+
+.discover-header p{
+font-size:.95rem;
+}
+
+.discover-tabs{
+flex-direction:column;
+}
+
+.discover-tabs button{
+width:100%;
+}
+
+.discover-content{
+padding:20px;
+min-height:auto;
+}
+
+}

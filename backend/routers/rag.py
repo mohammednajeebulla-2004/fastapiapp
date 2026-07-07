@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
 from schemas.rag import (
@@ -17,22 +17,31 @@ router = APIRouter(prefix="/rag", tags=["RAG"])
 
 @router.post("/embed-jobs", response_model=EmbedResponse)
 def embed_jobs(db: Session = Depends(get_db)):
-    count = embed_all_jobs(db)
-    return EmbedResponse(message=f"Embedded {count} jobs into Qdrant", count=count)
+    try:
+        count = embed_all_jobs(db)
+        return EmbedResponse(message=f"Embedded {count} jobs into Qdrant", count=count)
+    except ConnectionError as e:
+        raise HTTPException(status_code=503, detail=str(e))
 
 
 @router.post("/search", response_model=SemanticSearchResponse)
 def semantic_search(request: JobSearchRequest):
-    results = search_jobs(request.query, top_k=5)
-    return SemanticSearchResponse(
-        results=[SemanticSearchResult(**r) for r in results]
-    )
+    try:
+        results = search_jobs(request.query, top_k=5)
+        return SemanticSearchResponse(
+            results=[SemanticSearchResult(**r) for r in results]
+        )
+    except ConnectionError as e:
+        raise HTTPException(status_code=503, detail=str(e))
 
 
 @router.post("/ask", response_model=RagSearchResponse)
 def rag_ask(request: RagSearchRequest):
-    answer = rag_job_search(request.question)
-    return RagSearchResponse(answer=answer)
+    try:
+        answer = rag_job_search(request.question)
+        return RagSearchResponse(answer=answer)
+    except ConnectionError as e:
+        raise HTTPException(status_code=503, detail=str(e))
 
 
 @router.post("/analyse-resume", response_model=ResumeResponse)

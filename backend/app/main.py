@@ -20,6 +20,7 @@ app.include_router(auth.router)
 app.include_router(company.router)
 app.include_router(job.router)
 app.include_router(chat.router)
+app.include_router(rag.router)
 
 
 @app.get("/")

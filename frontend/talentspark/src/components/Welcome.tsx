@@ -1,27 +1,36 @@
-import {useState} from "react";
+import "./Welcome.css";
 
-function Counter(){
-    const [count,setCount] = useState(0);
-    const increment = () => {
-        setCount(count +1);
-    }
-    return(
-        <div>
-            <h1>Count: {count}</h1>
-            <button onClick={increment}>Increment</button>
+export default function Welcome() {
+  return (
+    <section className="hero">
+
+      <div className="hero-content">
+
+        <h1>
+          Find Your <span>Dream Job</span>
+        </h1>
+
+        <p>
+          TalentSpark is an AI-powered Job Portal that helps you discover
+          companies, search jobs semantically, and get personalized
+          recommendations using Artificial Intelligence.
+        </p>
+
+        <div className="search-box">
+
+          <input
+            type="text"
+            placeholder="Search jobs, skills, or companies..."
+          />
+
+          <button>
+            Search
+          </button>
+
         </div>
-    )
-        
-     
+
+      </div>
+
+    </section>
+  );
 }
-
-export default Counter
-
-
-//function Welcome(){
-//    return (
-//        <h1>Welcome to talentspark</h1>
-//    )
-//}
-//
-//export default Welcome
