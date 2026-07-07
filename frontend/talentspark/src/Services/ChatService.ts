@@ -1,4 +1,4 @@
-import type { ChatRequest, ChatResponse } from "../types/chat";
+import type { ChatResponse } from "../types/chat";
 
 const API_URL = "http://127.0.0.1:8000/chat/ask";
 

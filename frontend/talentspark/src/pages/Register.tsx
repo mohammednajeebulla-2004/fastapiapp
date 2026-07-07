@@ -64,13 +64,17 @@ function Register({ onSwitchToLogin }: Props) {
             required
           />
 
-          <input
-            type="text"
-            placeholder="Role"
+          <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
             required
-          />
+            className="role-select"
+          >
+            <option value="" disabled>Select Role</option>
+            <option value="candidate">Candidate</option>
+            <option value="hr">HR</option>
+            <option value="admin">Admin</option>
+          </select>
 
           <button type="submit">
             Register

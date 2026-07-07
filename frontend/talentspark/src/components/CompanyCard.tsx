@@ -7,6 +7,7 @@ type Props = {
   onedit: (company: Company) => void;
   ondelete: (id: number) => void;
   onadd: (company: Company) => void;
+  userRole?: string | null;
 };
 
 function CompanyCard({
@@ -14,12 +15,11 @@ function CompanyCard({
   onadd,
   onedit,
   ondelete,
+  userRole,
 }: Props) {
   const [editCompanyId, setEditCompanyId] =
     useState<number | null>(null);
 
-  const [editcompany, setEditcompany] =
-    useState<Company | null>(null);
 
   const [addform, setAddform] = useState<Company>({
     id: 0,
@@ -48,19 +48,6 @@ function CompanyCard({
       email: "",
       phone: "",
       location: "",
-      jobs: [],
-    });
-  };
-
-  const handleEdit = (company: Company) => {
-    onedit(company);
-
-    setEditform({
-      id: company.id,
-      name: company.name,
-      email: company.email,
-      phone: company.phone,
-      location: company.location,
       jobs: [],
     });
   };
@@ -204,35 +191,36 @@ function CompanyCard({
                   <strong>Location:</strong> {company.location}
                 </p>
 
-                <div className="button-row">
+                {(userRole === "admin" || userRole === "hr") && (
+                  <div className="button-row">
 
-                  <button
-                    className="edit-btn"
-                    onClick={() => {
-                      setEditCompanyId(company.id);
-                      setEditcompany(company);
+                    <button
+                      className="edit-btn"
+                      onClick={() => {
+                        setEditCompanyId(company.id);
 
-                      setEditform({
-                        id: company.id,
-                        name: company.name,
-                        email: company.email,
-                        phone: company.phone,
-                        location: company.location,
-                        jobs: [],
-                      });
-                    }}
-                  >
-                    Edit
-                  </button>
+                        setEditform({
+                          id: company.id,
+                          name: company.name,
+                          email: company.email,
+                          phone: company.phone,
+                          location: company.location,
+                          jobs: [],
+                        });
+                      }}
+                    >
+                      Edit
+                    </button>
 
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(company.id)}
-                  >
-                    Delete
-                  </button>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(company.id)}
+                    >
+                      Delete
+                    </button>
 
-                </div>
+                  </div>
+                )}
 
               </>
 
@@ -244,66 +232,68 @@ function CompanyCard({
 
       </div>
 
-      <div className="add-company">
+      {(userRole === "admin" || userRole === "hr") && (
+        <div className="add-company">
 
-        <h2>Add Company</h2>
+          <h2>Add Company</h2>
 
-        <input
-          type="text"
-          placeholder="Company Name"
-          value={addform.name}
-          onChange={(e) =>
-            setAddform({
-              ...addform,
-              name: e.target.value,
-            })
-          }
-        />
+          <input
+            type="text"
+            placeholder="Company Name"
+            value={addform.name}
+            onChange={(e) =>
+              setAddform({
+                ...addform,
+                name: e.target.value,
+              })
+            }
+          />
 
-        <input
-          type="text"
-          placeholder="Email"
-          value={addform.email}
-          onChange={(e) =>
-            setAddform({
-              ...addform,
-              email: e.target.value,
-            })
-          }
-        />
+          <input
+            type="text"
+            placeholder="Email"
+            value={addform.email}
+            onChange={(e) =>
+              setAddform({
+                ...addform,
+                email: e.target.value,
+              })
+            }
+          />
 
-        <input
-          type="text"
-          placeholder="Phone"
-          value={addform.phone}
-          onChange={(e) =>
-            setAddform({
-              ...addform,
-              phone: e.target.value,
-            })
-          }
-        />
+          <input
+            type="text"
+            placeholder="Phone"
+            value={addform.phone}
+            onChange={(e) =>
+              setAddform({
+                ...addform,
+                phone: e.target.value,
+              })
+            }
+          />
 
-        <input
-          type="text"
-          placeholder="Location"
-          value={addform.location}
-          onChange={(e) =>
-            setAddform({
-              ...addform,
-              location: e.target.value,
-            })
-          }
-        />
+          <input
+            type="text"
+            placeholder="Location"
+            value={addform.location}
+            onChange={(e) =>
+              setAddform({
+                ...addform,
+                location: e.target.value,
+              })
+            }
+          />
 
-        <button
-          className="add-btn"
-          onClick={handleAdd}
-        >
-          Add Company
-        </button>
+          <button
+            className="add-btn"
+            onClick={handleAdd}
+          >
+            Add Company
+          </button>
 
-      </div>
+        </div>
+      )}
 
     </div>
   );
