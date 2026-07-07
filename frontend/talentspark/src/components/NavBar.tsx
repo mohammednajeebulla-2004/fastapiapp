@@ -1,6 +1,15 @@
 import { useState } from "react";
 import "./NavBar.css";
-import { FaBriefcase, FaBuilding, FaRobot, FaSignOutAlt, FaBars, FaTimes, FaUser } from "react-icons/fa";
+import {
+  FaBriefcase,
+  FaBuilding,
+  FaRobot,
+  FaSignOutAlt,
+  FaUser,
+  FaHome,
+  FaBars,
+  FaTimes,
+} from "react-icons/fa";
 
 interface NavBarProps {
   onLogout: () => void;
@@ -8,84 +17,86 @@ interface NavBarProps {
 }
 
 export default function NavBar({ onLogout, role }: NavBarProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
+  const toggleSidebar = () => {
+    const next = !collapsed;
+    setCollapsed(next);
+    if (next) {
+      document.body.classList.add("sidebar-collapsed");
+    } else {
+      document.body.classList.remove("sidebar-collapsed");
+    }
   };
 
   const getRoleLabel = (r?: string | null) => {
-    if (!r) return "";
+    if (!r) return "Guest";
     if (r === "admin") return "Admin";
     if (r === "hr") return "HR Portal";
     return "Candidate";
   };
 
-  return (
-    <nav className="navbar">
-      <div className="logo">
-        Talent<span>Spark</span>
-      </div>
+  const navItems = [
+    { href: "#", icon: <FaHome />, label: "Home" },
+    { href: "#companies", icon: <FaBuilding />, label: "Companies" },
+    { href: "#jobs", icon: <FaBriefcase />, label: "Jobs" },
+    { href: "#ai", icon: <FaRobot />, label: "Discover Jobs" },
+  ];
 
-      <button className="menu-toggle" onClick={toggleMenu} aria-label="Toggle menu">
-        {isOpen ? <FaTimes /> : <FaBars />}
+  return (
+    <aside className={`sidebar ${collapsed ? "sidebar--collapsed" : ""}`}>
+      {/* Toggle button */}
+      <button
+        className="sidebar-toggle"
+        onClick={toggleSidebar}
+        aria-label="Toggle sidebar"
+      >
+        {collapsed ? <FaBars /> : <FaTimes />}
       </button>
 
-      <ul className={`nav-links ${isOpen ? "active" : ""}`}>
-        <li>
-          <a href="#" onClick={() => setIsOpen(false)}>
-            Home
-          </a>
-        </li>
-
-        <li>
-          <a href="#companies" onClick={() => setIsOpen(false)}>
-            <FaBuilding />
-            Companies
-          </a>
-        </li>
-
-        <li>
-          <a href="#jobs" onClick={() => setIsOpen(false)}>
-            <FaBriefcase />
-            Jobs
-          </a>
-        </li>
-
-        <li>
-          <a href="#ai" onClick={() => setIsOpen(false)}>
-            <FaRobot />
-            AI Assistant
-          </a>
-        </li>
-
-        {role && (
-          <li className="mobile-only">
-            <span className={`role-badge ${role}`}>
-              <FaUser /> {getRoleLabel(role)}
-            </span>
-          </li>
-        )}
-
-        <li className="mobile-only">
-          <button className="logout-btn mobile-logout-btn" onClick={() => { setIsOpen(false); onLogout(); }}>
-            <FaSignOutAlt />
-            Logout
-          </button>
-        </li>
-      </ul>
-
-      <div className="nav-actions">
-        {role && (
-          <span className={`role-badge desktop-only ${role}`}>
-            <FaUser /> {getRoleLabel(role)}
+      {/* Logo */}
+      <div className="sidebar-logo">
+        {collapsed ? (
+          <span className="logo-icon">⚡</span>
+        ) : (
+          <span className="logo-full">
+            Talent<span>Spark</span>
           </span>
         )}
-        <button className="logout-btn desktop-only" onClick={onLogout}>
-          <FaSignOutAlt />
-          Logout
-        </button>
       </div>
-    </nav>
+
+      {/* User badge */}
+      {role && (
+        <div className={`sidebar-user-badge ${role}`}>
+          <FaUser className="badge-icon" />
+          {!collapsed && <span>{getRoleLabel(role)}</span>}
+        </div>
+      )}
+
+      {/* Nav links */}
+      <nav className="sidebar-nav">
+        <ul>
+          {navItems.map((item) => (
+            <li key={item.href}>
+              <a href={item.href} className="sidebar-link">
+                <span className="sidebar-link-icon">{item.icon}</span>
+                {!collapsed && (
+                  <span className="sidebar-link-label">{item.label}</span>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* Spacer pushes logout to bottom */}
+      <div className="sidebar-spacer" />
+
+      {/* Logout */}
+      <button className="sidebar-logout" onClick={onLogout}>
+        <FaSignOutAlt className="sidebar-link-icon" />
+        {!collapsed && <span>Logout</span>}
+      </button>
+    </aside>
   );
 }

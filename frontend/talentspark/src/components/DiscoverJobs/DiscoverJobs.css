@@ -2,6 +2,7 @@
   width: 100%;
   margin: 50px auto;
   color: var(--text-primary);
+  scroll-margin-top: 30px;
 }
 
 .discover-header {
@@ -39,37 +40,52 @@
   background: rgba(255, 255, 255, 0.03);
   color: var(--text-secondary);
   border: 1px solid var(--border-color);
-  padding: 12px 24px;
+  padding: 11px 22px;
   border-radius: 30px;
   cursor: pointer;
   transition: var(--transition-smooth);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
 .discover-tabs button:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.07);
   color: var(--text-primary);
-  border-color: var(--text-muted);
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-1px);
 }
 
 .discover-tabs .active-tab {
-  background: var(--primary) !important;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%) !important;
   color: white !important;
-  border-color: var(--primary) !important;
-  box-shadow: 0 4px 15px var(--primary-glow) !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 20px var(--primary-glow), 0 0 0 1px rgba(79,142,247,0.3) !important;
+  transform: translateY(-1px);
 }
 
 .discover-content {
-  background: var(--bg-card);
+  background: rgba(13, 21, 38, 0.8);
   backdrop-filter: var(--glass-backdrop);
   -webkit-backdrop-filter: var(--glass-backdrop);
   border: 1px solid var(--border-color);
   border-radius: 20px;
   padding: 40px;
   min-height: 500px;
-  box-shadow: var(--glass-shadow);
+  box-shadow: 0 4px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
   transition: var(--transition-smooth);
+  position: relative;
+}
+
+.discover-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 40px;
+  right: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+  opacity: 0.4;
 }
 
 @media (max-width: 900px) {

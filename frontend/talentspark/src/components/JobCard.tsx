@@ -10,7 +10,7 @@ interface Props {
   userRole?: string | null;
 }
 
-function JobCard({ userRole }: Props) {
+function JobCard(_props: Props) {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(false);
@@ -124,19 +124,15 @@ function JobCard({ userRole }: Props) {
     return comp ? comp.location : "";
   };
 
-  const isHrOrAdmin = userRole === "admin" || userRole === "hr";
-
   if (loading) return <div className="job-loading">Loading jobs...</div>;
 
   return (
     <div className="job-section">
       <div className="job-section-header">
         <h2 className="job-title">Featured Jobs</h2>
-        {isHrOrAdmin && (
-          <button className="add-job-toggle-btn" onClick={() => setIsAdding(!isAdding)}>
-            {isAdding ? <FaTimes /> : <><FaPlus /> Post Job</>}
-          </button>
-        )}
+        <button className="add-job-toggle-btn" onClick={() => setIsAdding(!isAdding)}>
+          {isAdding ? <FaTimes /> : <><FaPlus /> Post Job</>}
+        </button>
       </div>
 
       {isAdding && (
@@ -286,7 +282,7 @@ function JobCard({ userRole }: Props) {
                 >
                   {job.id && appliedJobs.includes(job.id) ? "Applied" : "Apply Now"}
                 </button>
-                {isHrOrAdmin && job.id && (
+                {job.id && (
                   <div className="admin-actions">
                     <button className="icon-btn edit" onClick={() => handleEditInit(job)} title="Edit Job">
                       <FaEdit />

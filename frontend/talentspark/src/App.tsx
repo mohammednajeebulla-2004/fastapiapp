@@ -162,27 +162,29 @@ function App() {
   <div className="app-container">
     <NavBar onLogout={handleLogout} role={userRole} />
 
-    <main className="main-content">
-      <Welcome />
+    <div className="app-main">
+      <main className="main-content">
+        <Welcome />
 
-      <DiscoverJobs />
+        <DiscoverJobs />
 
-      <section className="section" id="companies">
-        <CompanyCard
-          companies={companies}
-          onedit={handleEditCompany}
-          ondelete={handleDeleteCompany}
-          onadd={handleAddCompany}
-          userRole={userRole}
-        />
-      </section>
+        <section className="section" id="companies">
+          <CompanyCard
+            companies={companies}
+            onedit={handleEditCompany}
+            ondelete={handleDeleteCompany}
+            onadd={handleAddCompany}
+            userRole={userRole}
+          />
+        </section>
 
-      <section className="section" id="jobs">
-        <JobCard userRole={userRole} />
-      </section>
-    </main>
+        <section className="section" id="jobs">
+          <JobCard userRole={userRole} />
+        </section>
+      </main>
 
-    <Footer />
+      <Footer />
+    </div>
 
     <ChatWidget />
   </div>

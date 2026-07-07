@@ -72,29 +72,38 @@
   margin-top: 25px;
   color: var(--primary);
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 .assistant-answer {
   margin-top: 30px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 25px;
+  background: linear-gradient(135deg, rgba(13,21,38,0.9) 0%, rgba(22,36,64,0.7) 100%);
+  border: 1px solid rgba(79, 142, 247, 0.2);
+  border-radius: 16px;
+  padding: 28px;
   animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
 .assistant-answer h4 {
-  color: var(--primary);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 15px;
 }
 
-.assistant-answer p {
-  color: var(--text-primary);
-  line-height: 1.8;
-  white-space: pre-wrap;
-  font-size: 15px;
+.formatted-response {
+  list-style: none;
 }
 
 @keyframes fadeIn {

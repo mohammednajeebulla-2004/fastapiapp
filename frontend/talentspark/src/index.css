@@ -1,34 +1,34 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg-primary: #0a0f1d;
-  --bg-secondary: #0f172a;
-  --bg-card: rgba(15, 23, 42, 0.6);
-  --bg-card-hover: rgba(30, 41, 59, 0.7);
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(59, 130, 246, 0.5);
-  
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
-  --primary-glow: rgba(59, 130, 246, 0.3);
-  
-  --secondary: #8b5cf6;
-  --secondary-hover: #7c3aed;
-  --secondary-glow: rgba(139, 92, 246, 0.3);
-  
-  --accent: #10b981;
-  --accent-hover: #059669;
-  
-  --danger: #ef4444;
-  --danger-hover: #dc2626;
-  
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-  --glass-backdrop: blur(12px);
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --bg-primary: #060b18;
+  --bg-secondary: #0d1526;
+  --bg-card: rgba(13, 21, 38, 0.75);
+  --bg-card-hover: rgba(22, 36, 64, 0.85);
+  --border-color: rgba(255, 255, 255, 0.07);
+  --border-hover: rgba(99, 153, 255, 0.55);
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #8da3c0;
+  --text-muted: #506070;
+
+  --primary: #4f8ef7;
+  --primary-hover: #2d71f0;
+  --primary-glow: rgba(79, 142, 247, 0.28);
+
+  --secondary: #9d6ef7;
+  --secondary-hover: #8351e8;
+  --secondary-glow: rgba(157, 110, 247, 0.28);
+
+  --accent: #22d3a0;
+  --accent-hover: #14b885;
+
+  --danger: #f56565;
+  --danger-hover: #e53e3e;
+
+  --glass-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.55);
+  --glass-backdrop: blur(16px) saturate(1.4);
+  --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -51,9 +51,10 @@ body,
 body {
   overflow-x: hidden;
   position: relative;
-  background-image: 
-    radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
+  background-image:
+    radial-gradient(ellipse at 15% 15%, rgba(79, 142, 247, 0.13) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 85%, rgba(157, 110, 247, 0.13) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(34, 211, 160, 0.04) 0%, transparent 60%);
   background-attachment: fixed;
 }
 
@@ -96,14 +97,49 @@ textarea::placeholder {
   color: var(--text-muted);
 }
 
+/* ── Sidebar layout ── */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* app-main sits to the right of the 240px sidebar */
+.app-main {
+  margin-left: 240px;
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* When sidebar is collapsed the toggle sets --sidebar-w on the element;
+   we replicate with a simple collapsed class approach via body data-attr */
+body.sidebar-collapsed .app-main {
+  margin-left: 68px;
+}
+
 .container {
   width: 90%;
-  max-width: 1300px;
+  max-width: 1200px;
   margin: auto;
 }
 
 .section {
   padding: 40px 0;
+  scroll-margin-top: 30px;
+}
+
+/* Mobile: sidebar becomes bottom bar — offset main up instead */
+@media (max-width: 768px) {
+  .app-main {
+    margin-left: 0;
+    margin-bottom: 64px;
+  }
+
+  .container {
+    width: 94%;
+  }
 }
 
 .card {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./DiscoverJobs.css";
 
 import SearchJobs from "./SearchJobs";
@@ -16,8 +16,21 @@ function DiscoverJobs() {
   const [activeTab, setActiveTab] =
     useState<Tab>("search");
 
+  // Listen for hash changes so clicking sidebar "AI Tools" link
+  // scrolls here AND auto-selects the Search tab
+  useEffect(() => {
+    const syncTab = () => {
+      if (window.location.hash === "#ai") {
+        setActiveTab("search");
+      }
+    };
+    window.addEventListener("hashchange", syncTab);
+    syncTab(); // run once on mount
+    return () => window.removeEventListener("hashchange", syncTab);
+  }, []);
+
   return (
-    <section className="discover-page">
+    <section className="discover-page" id="ai">
 
       <div className="discover-header">
 
