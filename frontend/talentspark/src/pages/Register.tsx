@@ -25,9 +25,10 @@ function Register({ onSwitchToLogin }: Props) {
 
       alert("Registration successful! Please login.");
       onSwitchToLogin();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error during registration:", error);
-      alert("Registration failed");
+      const msg = error.response?.data?.detail || "Registration failed";
+      alert(msg);
     }
   };
 

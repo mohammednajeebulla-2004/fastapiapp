@@ -29,7 +29,8 @@ function ResumeAnalyzer() {
       );
 
       if (!response.ok) {
-        throw new Error("Resume analysis failed.");
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.detail || "Resume analysis failed.");
       }
 
       const data = await response.json();
@@ -38,9 +39,9 @@ function ResumeAnalyzer() {
 
       setAnalysis(data.analysis || "No analysis available.");
 
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      setAnalysis("Unable to analyze the resume.");
+      setAnalysis(error.message || "Unable to analyze the resume.");
     } finally {
       setLoading(false);
     }

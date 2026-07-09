@@ -29,7 +29,8 @@ function CareerAssistant() {
       );
 
       if (!response.ok) {
-        throw new Error("Request failed");
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.detail || "Request failed");
       }
 
       const data = await response.json();
@@ -38,9 +39,9 @@ function CareerAssistant() {
 
       setAnswer(data.answer);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      setAnswer("Unable to connect to the server.");
+      setAnswer(error.message || "Unable to connect to the server.");
     } finally {
       setLoading(false);
     }

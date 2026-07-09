@@ -15,6 +15,7 @@ function CompanyCard({
   onadd,
   onedit,
   ondelete,
+  userRole,
 }: Props) {
   const [editCompanyId, setEditCompanyId] =
     useState<number | null>(null);
@@ -93,12 +94,14 @@ function CompanyCard({
           Company Management
         </h2>
 
-        <button
-          className="add-company-toggle-btn"
-          onClick={() => setShowAddForm(!showAddForm)}
-        >
-          {showAddForm ? "✕ Close" : "+ Add Company"}
-        </button>
+        {(userRole === "admin" || userRole === "hr") && (
+          <button
+            className="add-company-toggle-btn"
+            onClick={() => setShowAddForm(!showAddForm)}
+          >
+            {showAddForm ? "✕ Close" : "+ Add Company"}
+          </button>
+        )}
       </div>
 
       <div className="company-grid">
@@ -201,33 +204,35 @@ function CompanyCard({
                   <strong>Location:</strong> {company.location}
                 </p>
 
-                <div className="button-row">
+                {(userRole === "admin" || userRole === "hr") && (
+                  <div className="button-row">
 
-                  <button
-                    className="edit-btn"
-                    onClick={() => {
-                      setEditCompanyId(company.id);
-                      setEditform({
-                        id: company.id,
-                        name: company.name,
-                        email: company.email,
-                        phone: company.phone,
-                        location: company.location,
-                        jobs: [],
-                      });
-                    }}
-                  >
-                    Edit
-                  </button>
+                    <button
+                      className="edit-btn"
+                      onClick={() => {
+                        setEditCompanyId(company.id);
+                        setEditform({
+                          id: company.id,
+                          name: company.name,
+                          email: company.email,
+                          phone: company.phone,
+                          location: company.location,
+                          jobs: [],
+                        });
+                      }}
+                    >
+                      Edit
+                    </button>
 
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(company.id)}
-                  >
-                    Delete
-                  </button>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(company.id)}
+                    >
+                      Delete
+                    </button>
 
-                </div>
+                  </div>
+                )}
 
               </>
 

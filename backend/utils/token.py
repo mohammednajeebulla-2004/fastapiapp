@@ -9,7 +9,7 @@ from database import get_db
 from sqlalchemy.orm import Session
 
 
-load_dotenv()
+load_dotenv(override=True)
 # Provide safe defaults for development; prefer setting these in backend/.env
 SECRET_KEY = os.getenv("SECRET_KEY") or os.getenv("SECRET", None)
 if SECRET_KEY:

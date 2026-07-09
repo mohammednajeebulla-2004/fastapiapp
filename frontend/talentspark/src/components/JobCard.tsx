@@ -130,9 +130,11 @@ function JobCard(_props: Props) {
     <div className="job-section">
       <div className="job-section-header">
         <h2 className="job-title">Featured Jobs</h2>
-        <button className="add-job-toggle-btn" onClick={() => setIsAdding(!isAdding)}>
-          {isAdding ? <FaTimes /> : <><FaPlus /> Post Job</>}
-        </button>
+        {(_props.userRole === "admin" || _props.userRole === "hr") && (
+          <button className="add-job-toggle-btn" onClick={() => setIsAdding(!isAdding)}>
+            {isAdding ? <FaTimes /> : <><FaPlus /> Post Job</>}
+          </button>
+        )}
       </div>
 
       {isAdding && (
@@ -282,7 +284,7 @@ function JobCard(_props: Props) {
                 >
                   {job.id && appliedJobs.includes(job.id) ? "Applied" : "Apply Now"}
                 </button>
-                {job.id && (
+                {job.id && (_props.userRole === "admin" || _props.userRole === "hr") && (
                   <div className="admin-actions">
                     <button className="icon-btn edit" onClick={() => handleEditInit(job)} title="Edit Job">
                       <FaEdit />

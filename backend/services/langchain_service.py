@@ -6,7 +6,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableWithMessageHistory
 from langchain_community.chat_message_histories import ChatMessageHistory
 
-load_dotenv()
+load_dotenv(override=True)
 
 store: dict[str, ChatMessageHistory] = {}
 chat_with_memory: RunnableWithMessageHistory | None = None

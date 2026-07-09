@@ -72,13 +72,13 @@ function App() {
       try {
         const companiesResponse = await getCompanies();
         setCompanies(companiesResponse);
-      } catch (err) {
+      } catch (err: any) {
         const errorMessage =
-          err instanceof Error ? err.message : String(err);
+          err.response?.data?.detail || err.message || String(err);
 
         setError(errorMessage);
 
-        if (errorMessage.includes("401")) {
+        if (errorMessage.includes("401") || errorMessage.includes("Not authenticated")) {
           localStorage.removeItem("token");
           setToken(null);
         }
@@ -104,8 +104,8 @@ function App() {
     try {
       const created = await createCompany(company);
       setCompanies((prev) => [...prev, created]);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+    } catch (err: any) {
+      setError(err.response?.data?.detail || err.message || String(err));
     }
   };
 
@@ -121,8 +121,8 @@ function App() {
         const created = await createCompany(company);
         setCompanies((prev) => [...prev, created]);
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+    } catch (err: any) {
+      setError(err.response?.data?.detail || err.message || String(err));
     }
   };
 
@@ -130,8 +130,8 @@ function App() {
     try {
       await deleteCompany(id);
       setCompanies((prev) => prev.filter((c) => c.id !== id));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+    } catch (err: any) {
+      setError(err.response?.data?.detail || err.message || String(err));
     }
   };
 

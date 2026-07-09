@@ -6,7 +6,7 @@ from fastembed import TextEmbedding
 from sqlalchemy.orm import Session
 from models.job import Job
 
-load_dotenv()
+load_dotenv(override=True)
 
 COLLECTION_NAME = "job_descriptions"
 VECTOR_SIZE = 384
@@ -76,10 +76,14 @@ def embed_text(text: str) -> list[float]:
     return next(embeddings_model.embed([text])).tolist()
 
 
-def embed_all_jobs(db: Session) -> int:
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+
+async def embed_all_jobs(db: AsyncSession) -> int:
     ensure_collection()
 
-    jobs = db.query(Job).all()
+    result = await db.execute(select(Job))
+    jobs = result.scalars().all()
 
     if not jobs:
         return 0

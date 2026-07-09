@@ -20,9 +20,10 @@ function Login({ onLogin, onSwitchToRegister }: Props) {
       localStorage.setItem("token", response.access_token);
 
       onLogin(response.access_token);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert("Login Failed");
+      const errorMsg = error.response?.data?.detail || error.message || "Unknown error occurred";
+      alert(`Login Failed: ${errorMsg}`);
     }
   };
 

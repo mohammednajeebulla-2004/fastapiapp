@@ -15,10 +15,12 @@ from services.rag_service import rag_job_search
 router = APIRouter(prefix="/rag", tags=["RAG"])
 
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 @router.post("/embed-jobs", response_model=EmbedResponse)
-def embed_jobs(db: Session = Depends(get_db)):
+async def embed_jobs(db: AsyncSession = Depends(get_db)):
     try:
-        count = embed_all_jobs(db)
+        count = await embed_all_jobs(db)
         return EmbedResponse(message=f"Embedded {count} jobs into Qdrant", count=count)
     except ConnectionError as e:
         raise HTTPException(status_code=503, detail=str(e))
@@ -42,12 +44,17 @@ def rag_ask(request: RagSearchRequest):
         return RagSearchResponse(answer=answer)
     except ConnectionError as e:
         raise HTTPException(status_code=503, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Service Error: {str(e)}")
 
 
 @router.post("/analyse-resume", response_model=ResumeResponse)
 def resume_analyse(request: ResumeRequest):
-    analysis = analyse_resume(request.resume_text)
-    return ResumeResponse(analysis=analysis)
+    try:
+        analysis = analyse_resume(request.resume_text)
+        return ResumeResponse(analysis=analysis)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Service Error: {str(e)}")
 
 
 @router.post("/job-match", response_model=JobMatchResponse)
