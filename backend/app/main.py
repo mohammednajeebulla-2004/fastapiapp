@@ -15,9 +15,16 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    from database import engine
+    from database import engine, SessionLocal
+    from services.qdrant_service import embed_all_jobs
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+    
+    async with SessionLocal() as db:
+        try:
+            await embed_all_jobs(db)
+        except Exception as e:
+            print(f"Failed to embed jobs on startup: {e}")
 
 #print(engine)
 

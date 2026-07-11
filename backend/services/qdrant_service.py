@@ -116,6 +116,39 @@ async def embed_all_jobs(db: AsyncSession) -> int:
 
     return len(points)
 
+def embed_single_job(job: Job):
+    if qdrant is None:
+        return
+    ensure_collection()
+    text = f"{job.title} {job.description or ''}"
+    vector = embed_text(text)
+    qdrant.upsert(
+        collection_name=COLLECTION_NAME,
+        points=[
+            PointStruct(
+                id=job.id,
+                vector=vector,
+                payload={
+                    "job_id": job.id,
+                    "title": job.title,
+                    "description": job.description or "",
+                    "salary": job.salary,
+                },
+            )
+        ],
+    )
+
+def delete_job_embedding(job_id: int):
+    if qdrant is None:
+        return
+    try:
+        qdrant.delete(
+            collection_name=COLLECTION_NAME,
+            points_selector=[job_id],
+        )
+    except Exception:
+        pass
+
 
 def search_jobs(query: str, top_k: int = 5) -> list[dict]:
 
