@@ -56,7 +56,7 @@ async def update_company(company_id: int,company: CompanyUpdate,db:AsyncSession=
         db_company = result.scalars().first()
         if not db_company:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Company not found")
-        for key , value in company.dict().items():
+        for key , value in company.dict(exclude_unset=True).items():
             setattr(db_company,key,value)
         await db.commit()
         await db.refresh(db_company)

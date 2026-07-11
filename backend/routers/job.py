@@ -19,6 +19,8 @@ async def create_job(job: JobCreate, db: AsyncSession = Depends(get_db), current
         await db.commit()
         await db.refresh(db_job)
         return db_job
+    except HTTPException:
+        raise
     except Exception as e:
         await db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -29,6 +31,8 @@ async def get_all_job(db: AsyncSession = Depends(get_db), current_user=Depends(g
     try:
         jobs = await db.execute(select(Job))
         return jobs.scalars().all()
+    except HTTPException:
+        raise
     except Exception as e:
         await db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -47,6 +51,8 @@ async def get_job(job_id: int, db: AsyncSession = Depends(get_db), current_user=
             )
 
         return job
+    except HTTPException:
+        raise
     except Exception as e:
         await db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -64,12 +70,14 @@ async def update_job(job_id: int, job: JobUpdate, db: AsyncSession = Depends(get
                 detail="Job Not Found"
             )
 
-        for key, value in job.dict().items():
+        for key, value in job.dict(exclude_unset=True).items():
             setattr(db_job, key, value)
         await db.commit()
         await db.refresh(db_job)
 
         return db_job
+    except HTTPException:
+        raise
     except Exception as e:
         await db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -90,7 +98,9 @@ async def delete_job(job_id: int, db: AsyncSession = Depends(get_db), current_us
         await db.delete(db_job)
         await db.commit()
 
-        return {"detail": "Job deleted successfully."}
+        return None
+    except HTTPException:
+        raise
     except Exception as e:
         await db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
