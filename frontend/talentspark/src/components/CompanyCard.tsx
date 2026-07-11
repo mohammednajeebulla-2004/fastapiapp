@@ -2,7 +2,7 @@ import "./CompanyCard.css";
 import type { Company } from "../types/company";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { FaBuilding, FaEnvelope, FaPhone, FaMapMarkerAlt, FaEdit, FaTrash } from "react-icons/fa";
+import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaEdit, FaTrash } from "react-icons/fa";
 
 type Props = {
   companies: Company[];
