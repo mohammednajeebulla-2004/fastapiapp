@@ -103,7 +103,67 @@
 }
 
 .formatted-response {
-  list-style: none;
+  font-family: inherit;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.formatted-response p {
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+
+.formatted-response h1,
+.formatted-response h2,
+.formatted-response h3,
+.formatted-response h4,
+.formatted-response h5,
+.formatted-response h6 {
+  color: var(--primary);
+  margin-top: 24px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.formatted-response h3 { font-size: 20px; }
+.formatted-response h4 { font-size: 18px; }
+.formatted-response h5 { font-size: 16px; }
+
+.formatted-response ul,
+.formatted-response ol {
+  margin-left: 20px;
+  margin-bottom: 16px;
+}
+
+.formatted-response li {
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.formatted-response strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.formatted-response a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+.formatted-response a:hover {
+  text-decoration: underline;
+  color: var(--primary-hover);
+}
+
+.formatted-response code {
+  background: rgba(10, 15, 29, 0.8);
+  padding: 3px 6px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 14px;
+  color: var(--primary);
+  border: 1px solid var(--border-color);
 }
 
 @keyframes fadeIn {

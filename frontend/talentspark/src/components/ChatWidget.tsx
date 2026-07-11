@@ -1,5 +1,7 @@
 import { useState } from "react";
 import "./ChatWidget.css";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface ChatMessage {
   sender: "user" | "bot";
@@ -100,10 +102,16 @@ export default function ChatWidget() {
                 className={
                   msg.sender === "user"
                     ? "user-message"
-                    : "bot-message"
+                    : "bot-message formatted-response"
                 }
               >
-                {msg.text}
+                {msg.sender === "bot" ? (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {msg.text}
+                  </ReactMarkdown>
+                ) : (
+                  msg.text
+                )}
               </div>
 
             ))}

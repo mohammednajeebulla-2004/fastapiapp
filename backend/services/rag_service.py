@@ -46,10 +46,10 @@ def rag_job_search(question: str) -> str:
 
     context = "\n".join(
         [
-            f"Job Title: {r['title']}\n"
-            f"Description: {r['description']}\n"
-            f"Salary: {r['salary']}\n"
-            f"Similarity Score: {r['score']}\n"
+            f"### {r['title']}\n"
+            f"- **Description:** {r['description']}\n"
+            f"- **Salary:** ₹{r['salary']}\n"
+            f"- **Match Score:** {round(r['score'] * 100, 1)}%\n"
             for r in results
         ]
     )
