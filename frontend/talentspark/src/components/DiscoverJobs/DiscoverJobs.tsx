@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { Routes, Route, NavLink, Navigate } from "react-router-dom";
 import "./DiscoverJobs.css";
 
 import SearchJobs from "./SearchJobs";
@@ -6,29 +6,7 @@ import CareerAssistant from "./CareerAssistant";
 import ResumeAnalyzer from "./ResumeAnalyzer";
 import JobMatching from "./JobMatching";
 
-type Tab =
-  | "search"
-  | "assistant"
-  | "resume"
-  | "matching";
-
 function DiscoverJobs() {
-  const [activeTab, setActiveTab] =
-    useState<Tab>("search");
-
-  // Listen for hash changes so clicking sidebar "AI Tools" link
-  // scrolls here AND auto-selects the Search tab
-  useEffect(() => {
-    const syncTab = () => {
-      if (window.location.hash === "#ai") {
-        setActiveTab("search");
-      }
-    };
-    window.addEventListener("hashchange", syncTab);
-    syncTab(); // run once on mount
-    return () => window.removeEventListener("hashchange", syncTab);
-  }, []);
-
   return (
     <section className="discover-page" id="ai">
 
@@ -45,71 +23,40 @@ function DiscoverJobs() {
       </div>
 
       <div className="discover-tabs">
-
-        <button
-          className={
-            activeTab === "search"
-              ? "active-tab"
-              : ""
-          }
-          onClick={() => setActiveTab("search")}
+        <NavLink
+          to="/discover-jobs/search"
+          className={({ isActive }) => (isActive ? "active-tab" : "")}
         >
           Search Jobs
-        </button>
-
-        <button
-          className={
-            activeTab === "assistant"
-              ? "active-tab"
-              : ""
-          }
-          onClick={() => setActiveTab("assistant")}
+        </NavLink>
+        <NavLink
+          to="/discover-jobs/assistant"
+          className={({ isActive }) => (isActive ? "active-tab" : "")}
         >
           Career Assistant
-        </button>
-
-        <button
-          className={
-            activeTab === "resume"
-              ? "active-tab"
-              : ""
-          }
-          onClick={() => setActiveTab("resume")}
+        </NavLink>
+        <NavLink
+          to="/discover-jobs/resume"
+          className={({ isActive }) => (isActive ? "active-tab" : "")}
         >
           Resume Analyzer
-        </button>
-
-        <button
-          className={
-            activeTab === "matching"
-              ? "active-tab"
-              : ""
-          }
-          onClick={() => setActiveTab("matching")}
+        </NavLink>
+        <NavLink
+          to="/discover-jobs/matching"
+          className={({ isActive }) => (isActive ? "active-tab" : "")}
         >
           Job Matching
-        </button>
-
+        </NavLink>
       </div>
 
       <div className="discover-content">
-
-        {activeTab === "search" && (
-          <SearchJobs />
-        )}
-
-        {activeTab === "assistant" && (
-          <CareerAssistant />
-        )}
-
-        {activeTab === "resume" && (
-          <ResumeAnalyzer />
-        )}
-
-        {activeTab === "matching" && (
-          <JobMatching />
-        )}
-
+        <Routes>
+          <Route path="/" element={<Navigate to="search" replace />} />
+          <Route path="search" element={<SearchJobs />} />
+          <Route path="assistant" element={<CareerAssistant />} />
+          <Route path="resume" element={<ResumeAnalyzer />} />
+          <Route path="matching" element={<JobMatching />} />
+        </Routes>
       </div>
 
     </section>

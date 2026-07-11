@@ -119,6 +119,21 @@ body.sidebar-collapsed .app-main {
   margin-left: 68px;
 }
 
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-content > * {
+  animation: pageFadeIn 0.4s ease-out forwards;
+}
+
 .container {
   width: 90%;
   max-width: 1200px;

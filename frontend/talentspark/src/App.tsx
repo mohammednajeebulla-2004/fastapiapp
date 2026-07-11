@@ -15,6 +15,7 @@ import {
 } from "./Services/CompanyService";
 import type { Company } from "./types/company";
 import ChatWidget from "./components/ChatWidget";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 function decodeToken(token: string) {
   try {
@@ -164,23 +165,33 @@ function App() {
 
     <div className="app-main">
       <main className="main-content">
-        <Welcome />
-
-        <DiscoverJobs />
-
-        <section className="section" id="companies">
-          <CompanyCard
-            companies={companies}
-            onedit={handleEditCompany}
-            ondelete={handleDeleteCompany}
-            onadd={handleAddCompany}
-            userRole={userRole}
+        <Routes>
+          <Route path="/" element={<Welcome />} />
+          <Route path="/discover-jobs/*" element={<DiscoverJobs />} />
+          <Route 
+            path="/companies" 
+            element={
+              <section className="section" id="companies">
+                <CompanyCard
+                  companies={companies}
+                  onedit={handleEditCompany}
+                  ondelete={handleDeleteCompany}
+                  onadd={handleAddCompany}
+                  userRole={userRole}
+                />
+              </section>
+            } 
           />
-        </section>
-
-        <section className="section" id="jobs">
-          <JobCard userRole={userRole} />
-        </section>
+          <Route 
+            path="/jobs" 
+            element={
+              <section className="section" id="jobs">
+                <JobCard userRole={userRole} />
+              </section>
+            } 
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </main>
 
       <Footer />

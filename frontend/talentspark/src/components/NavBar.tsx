@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import "./NavBar.css";
 import {
   FaBriefcase,
@@ -37,10 +38,10 @@ export default function NavBar({ onLogout, role }: NavBarProps) {
   };
 
   const navItems = [
-    { href: "#", icon: <FaHome />, label: "Home" },
-    { href: "#companies", icon: <FaBuilding />, label: "Companies" },
-    { href: "#jobs", icon: <FaBriefcase />, label: "Jobs" },
-    { href: "#ai", icon: <FaRobot />, label: "Discover Jobs" },
+    { to: "/", icon: <FaHome />, label: "Home" },
+    { to: "/companies", icon: <FaBuilding />, label: "Companies" },
+    { to: "/jobs", icon: <FaBriefcase />, label: "Jobs" },
+    { to: "/discover-jobs", icon: <FaRobot />, label: "Discover Jobs" },
   ];
 
   return (
@@ -77,13 +78,17 @@ export default function NavBar({ onLogout, role }: NavBarProps) {
       <nav className="sidebar-nav">
         <ul>
           {navItems.map((item) => (
-            <li key={item.href}>
-              <a href={item.href} className="sidebar-link">
+            <li key={item.to}>
+              <NavLink 
+                to={item.to} 
+                className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
+                end={item.to === "/"}
+              >
                 <span className="sidebar-link-icon">{item.icon}</span>
                 {!collapsed && (
                   <span className="sidebar-link-label">{item.label}</span>
                 )}
-              </a>
+              </NavLink>
             </li>
           ))}
         </ul>
