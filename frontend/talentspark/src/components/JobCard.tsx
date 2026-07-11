@@ -1,24 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./JobCard.css";
 import type { Job } from "../types/job";
 import type { Company } from "../types/company";
-import { getJobs, createJob, updateJob, deleteJob } from "../Services/JobService";
-import { getCompanies } from "../Services/CompanyService";
 import { FaBriefcase, FaTrash, FaEdit, FaPlus, FaTimes, FaBuilding, FaMapMarkerAlt } from "react-icons/fa";
 
 interface Props {
+  jobs: Job[];
+  companies: Company[];
+  onedit: (job: Job) => void;
+  ondelete: (id: number) => void;
+  onadd: (job: Job) => void;
   userRole?: string | null;
 }
 
-function JobCard(_props: Props) {
+function JobCard(props: Props) {
+  const { jobs, companies, onedit, ondelete, onadd, userRole } = props;
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
-
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [companies, setCompanies] = useState<Company[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const [isAdding, setIsAdding] = useState(false);
   const [editingJobId, setEditingJobId] = useState<number | null>(null);
@@ -39,44 +38,15 @@ function JobCard(_props: Props) {
 
   const [appliedJobs, setAppliedJobs] = useState<number[]>([]);
 
-  useEffect(() => {
-    fetchJobsAndCompanies();
-  }, []);
-
-  const fetchJobsAndCompanies = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const [jobsData, companiesData] = await Promise.all([
-        getJobs(),
-        getCompanies()
-      ]);
-      setJobs(jobsData);
-      setCompanies(companiesData);
-    } catch (err: any) {
-      console.error(err);
-      const msg = err?.response?.data?.detail || err?.message || String(err);
-      setError(`Failed to fetch jobs data: ${msg}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleAdd = async (e: React.FormEvent) => {
+  const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
     if (!addForm.company_id) {
       alert("Please select a company");
       return;
     }
-    try {
-      const newJob = await createJob(addForm);
-      setJobs((prev) => [...prev, newJob]);
-      setIsAdding(false);
-      setAddForm({ title: "", salary: 0, description: "", company_id: 0 });
-    } catch (err) {
-      console.error(err);
-      alert("Failed to create job. Check if you have proper permissions (HR/Admin).");
-    }
+    onadd(addForm);
+    setIsAdding(false);
+    setAddForm({ title: "", salary: 0, description: "", company_id: 0 });
   };
 
   const handleEditInit = (job: Job) => {
@@ -86,28 +56,16 @@ function JobCard(_props: Props) {
     }
   };
 
-  const handleEditSave = async (e: React.FormEvent) => {
+  const handleEditSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingJobId) return;
-    try {
-      const updated = await updateJob(editingJobId, editForm);
-      setJobs((prev) => prev.map((j) => (j.id === editingJobId ? updated : j)));
-      setEditingJobId(null);
-    } catch (err) {
-      console.error(err);
-      alert("Failed to update job");
-    }
+    onedit(editForm);
+    setEditingJobId(null);
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = (id: number) => {
     if (!confirm("Are you sure you want to delete this job?")) return;
-    try {
-      await deleteJob(id);
-      setJobs((prev) => prev.filter((j) => j.id !== id));
-    } catch (err) {
-      console.error(err);
-      alert("Failed to delete job");
-    }
+    ondelete(id);
   };
 
   const handleApply = (id: number) => {
@@ -128,13 +86,11 @@ function JobCard(_props: Props) {
     return comp ? comp.location : "";
   };
 
-  if (loading) return <div className="job-loading">Loading jobs...</div>;
-
   return (
     <div className="job-section">
       <div className="job-section-header">
         <h2 className="job-title">Featured Jobs</h2>
-        {(_props.userRole === "admin" || _props.userRole === "hr") && (
+        {(userRole === "admin" || userRole === "hr") && (
           <button className="add-job-toggle-btn" onClick={() => setIsAdding(!isAdding)}>
             {isAdding ? <FaTimes /> : <><FaPlus /> Post Job</>}
           </button>
@@ -248,9 +204,7 @@ function JobCard(_props: Props) {
         </form>
       )}
 
-      {error && <div className="error-alert">{error}</div>}
-
-      {jobs.length === 0 && !loading && (
+      {jobs.length === 0 && (
         <div className="jobs-empty-state card">
           <FaBriefcase className="empty-icon" style={{ fontSize: "40px", marginBottom: "15px", color: "var(--text-muted)" }} />
           <p>No job postings available yet.</p>
@@ -294,7 +248,7 @@ function JobCard(_props: Props) {
                 >
                   {job.id && appliedJobs.includes(job.id) ? "Applied" : "Apply Now"}
                 </button>
-                {job.id && (_props.userRole === "admin" || _props.userRole === "hr") && (
+                {job.id && (userRole === "admin" || userRole === "hr") && (
                   <div className="admin-actions">
                     <button className="icon-btn edit" onClick={() => handleEditInit(job)} title="Edit Job">
                       <FaEdit />

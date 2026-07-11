@@ -13,7 +13,14 @@ import {
   updateCompany,
   deleteCompany,
 } from "./Services/CompanyService";
+import {
+  getJobs,
+  createJob,
+  updateJob,
+  deleteJob,
+} from "./Services/JobService";
 import type { Company } from "./types/company";
+import type { Job } from "./types/job";
 import ChatWidget from "./components/ChatWidget";
 import { Routes, Route, Navigate } from "react-router-dom";
 
@@ -39,6 +46,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [token, setToken] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [showRegister, setShowRegister] = useState(false);
@@ -66,13 +74,17 @@ function App() {
   useEffect(() => {
     if (!token) return;
 
-    async function fetchCompanies() {
+    async function fetchData() {
       setLoading(true);
       setError(null);
 
       try {
-        const companiesResponse = await getCompanies();
+        const [companiesResponse, jobsResponse] = await Promise.all([
+          getCompanies(),
+          getJobs()
+        ]);
         setCompanies(companiesResponse);
+        setJobs(jobsResponse);
       } catch (err: any) {
         const errorMessage =
           err.response?.data?.detail || err.message || String(err);
@@ -88,7 +100,7 @@ function App() {
       }
     }
 
-    fetchCompanies();
+    fetchData();
   }, [token]);
 
   const handleLogin = (newToken: string) => {
@@ -131,6 +143,40 @@ function App() {
     try {
       await deleteCompany(id);
       setCompanies((prev) => prev.filter((c) => c.id !== id));
+    } catch (err: any) {
+      setError(err.response?.data?.detail || err.message || String(err));
+    }
+  };
+
+  const handleAddJob = async (job: Job) => {
+    try {
+      const created = await createJob(job);
+      setJobs((prev) => [...prev, created]);
+    } catch (err: any) {
+      setError(err.response?.data?.detail || err.message || String(err));
+    }
+  };
+
+  const handleEditJob = async (job: Job) => {
+    try {
+      if (job.id && job.id > 0) {
+        const updated = await updateJob(job.id, job);
+        setJobs((prev) =>
+          prev.map((j) => (j.id === updated.id ? updated : j))
+        );
+      } else {
+        const created = await createJob(job);
+        setJobs((prev) => [...prev, created]);
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.detail || err.message || String(err));
+    }
+  };
+
+  const handleDeleteJob = async (id: number) => {
+    try {
+      await deleteJob(id);
+      setJobs((prev) => prev.filter((j) => j.id !== id));
     } catch (err: any) {
       setError(err.response?.data?.detail || err.message || String(err));
     }
@@ -186,7 +232,14 @@ function App() {
             path="/jobs" 
             element={
               <section className="section" id="jobs">
-                <JobCard userRole={userRole} />
+                <JobCard 
+                  jobs={jobs}
+                  companies={companies}
+                  onedit={handleEditJob}
+                  ondelete={handleDeleteJob}
+                  onadd={handleAddJob}
+                  userRole={userRole} 
+                />
               </section>
             } 
           />
