@@ -80,6 +80,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 async def embed_all_jobs(db: AsyncSession) -> int:
+    if qdrant is not None:
+        try:
+            qdrant.delete_collection(COLLECTION_NAME)
+        except Exception:
+            pass
+
     ensure_collection()
 
     result = await db.execute(select(Job))

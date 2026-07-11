@@ -121,7 +121,7 @@ function JobMatching() {
             <div className="match-footer">
 
               <span>
-                ₹ {job.salary}
+                ₹ {job.salary} LPA
               </span>
 
               <span className="match-score">

@@ -204,10 +204,16 @@
 .location {
   color: var(--text-secondary);
   font-size: 14px;
-  margin-top: 6px;
+  margin-top: 8px;
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.job-meta-icon {
+  color: var(--primary);
+  opacity: 0.8;
+  font-size: 14px;
 }
 
 .job-desc-preview {

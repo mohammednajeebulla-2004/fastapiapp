@@ -48,7 +48,7 @@ def rag_job_search(question: str) -> str:
         [
             f"### {r['title']}\n"
             f"- **Description:** {r['description']}\n"
-            f"- **Salary:** ₹{r['salary']}\n"
+            f"- **Salary:** ₹{r['salary']} LPA\n"
             f"- **Match Score:** {round(r['score'] * 100, 1)}%\n"
             for r in results
         ]

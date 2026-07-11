@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import "./SearchJobs.css";
 
 type Job = {
@@ -10,13 +11,16 @@ type Job = {
 };
 
 function SearchJobs() {
-  const [query, setQuery] = useState("");
+  const [searchParams] = useSearchParams();
+  const initialQuery = searchParams.get("q") || "";
+
+  const [query, setQuery] = useState(initialQuery);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
 
-  const handleSearch = async () => {
-    if (!query.trim()) {
+  const handleSearch = useCallback(async (searchString: string) => {
+    if (!searchString.trim()) {
       alert("Please enter a search query.");
       return;
     }
@@ -33,7 +37,7 @@ function SearchJobs() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            query: query,
+            query: searchString,
           }),
         }
       );
@@ -55,7 +59,14 @@ function SearchJobs() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  // Auto search on mount if query parameter exists
+  useEffect(() => {
+    if (initialQuery) {
+      handleSearch(initialQuery);
+    }
+  }, [initialQuery, handleSearch]);
 
   return (
     <div className="search-jobs">
@@ -80,12 +91,12 @@ function SearchJobs() {
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              handleSearch();
+              handleSearch(query);
             }
           }}
         />
 
-        <button onClick={handleSearch}>
+        <button onClick={() => handleSearch(query)}>
           Search
         </button>
 
@@ -119,7 +130,7 @@ function SearchJobs() {
             <div className="job-info">
 
               <span>
-                ₹ {job.salary}
+                ₹ {job.salary} LPA
               </span>
 
               <span>

@@ -1,16 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import "./JobCard.css";
 import type { Job } from "../types/job";
 import type { Company } from "../types/company";
 import { getJobs, createJob, updateJob, deleteJob } from "../Services/JobService";
 import { getCompanies } from "../Services/CompanyService";
-import { FaBriefcase, FaTrash, FaEdit, FaPlus, FaTimes } from "react-icons/fa";
+import { FaBriefcase, FaTrash, FaEdit, FaPlus, FaTimes, FaBuilding, FaMapMarkerAlt } from "react-icons/fa";
 
 interface Props {
   userRole?: string | null;
 }
 
 function JobCard(_props: Props) {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q") || "";
+
   const [jobs, setJobs] = useState<Job[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(false);
@@ -254,21 +258,27 @@ function JobCard(_props: Props) {
       )}
 
       <div className="jobs-grid">
-        {jobs.map((job) => (
+        {jobs
+          .filter((job) => 
+            query === "" || 
+            job.title.toLowerCase().includes(query.toLowerCase()) || 
+            (job.description && job.description.toLowerCase().includes(query.toLowerCase()))
+          )
+          .map((job) => (
           <div className="job-card" key={job.id}>
             <div className="job-header">
               <h3>{job.title}</h3>
               <span className="salary">₹{job.salary} LPA</span>
             </div>
 
-            <p className="company">
-              🏢 {getCompanyName(job.company_id)}
-            </p>
-
+            <div className="company">
+              <FaBuilding className="job-meta-icon" /> {getCompanyName(job.company_id)}
+            </div>
+            
             {getCompanyLocation(job.company_id) && (
-              <p className="location">
-                📍 {getCompanyLocation(job.company_id)}
-              </p>
+              <div className="location">
+                <FaMapMarkerAlt className="job-meta-icon" /> {getCompanyLocation(job.company_id)}
+              </div>
             )}
 
             <div className="job-desc-preview">

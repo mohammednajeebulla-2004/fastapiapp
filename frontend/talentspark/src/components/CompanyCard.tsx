@@ -1,6 +1,8 @@
 import "./CompanyCard.css";
 import type { Company } from "../types/company";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { FaBuilding, FaEnvelope, FaPhone, FaMapMarkerAlt, FaEdit, FaTrash } from "react-icons/fa";
 
 type Props = {
   companies: Company[];
@@ -17,6 +19,8 @@ function CompanyCard({
   ondelete,
   userRole,
 }: Props) {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q") || "";
   const [editCompanyId, setEditCompanyId] =
     useState<number | null>(null);
 
@@ -106,7 +110,13 @@ function CompanyCard({
 
       <div className="company-grid">
 
-        {companies.map((company) => (
+        {companies
+          .filter(company => 
+             query === "" || 
+             company.name.toLowerCase().includes(query.toLowerCase()) || 
+             (company.location && company.location.toLowerCase().includes(query.toLowerCase()))
+          )
+          .map((company) => (
 
           <div
             key={company.id}
@@ -186,29 +196,33 @@ function CompanyCard({
               </div>
 
             ) : (
-                              <>
+              <>
+                <div className="company-header">
+                  <div className="company-logo-circle">
+                    {company.name.charAt(0).toUpperCase()}
+                  </div>
+                  <h3 className="company-name">
+                    {company.name}
+                  </h3>
+                </div>
 
-                <h3 className="company-name">
-                  {company.name}
-                </h3>
-
-                <p>
-                  <strong>Email:</strong> {company.email}
-                </p>
-
-                <p>
-                  <strong>Phone:</strong> {company.phone}
-                </p>
-
-                <p>
-                  <strong>Location:</strong> {company.location}
-                </p>
+                <div className="company-details">
+                  <p>
+                    <FaEnvelope className="detail-icon" /> {company.email}
+                  </p>
+                  <p>
+                    <FaPhone className="detail-icon" /> {company.phone}
+                  </p>
+                  <p>
+                    <FaMapMarkerAlt className="detail-icon" /> {company.location}
+                  </p>
+                </div>
 
                 {(userRole === "admin" || userRole === "hr") && (
-                  <div className="button-row">
-
+                  <div className="company-actions">
                     <button
-                      className="edit-btn"
+                      className="icon-btn edit"
+                      title="Edit Company"
                       onClick={() => {
                         setEditCompanyId(company.id);
                         setEditform({
@@ -221,19 +235,17 @@ function CompanyCard({
                         });
                       }}
                     >
-                      Edit
+                      <FaEdit />
                     </button>
-
                     <button
-                      className="delete-btn"
+                      className="icon-btn delete"
+                      title="Delete Company"
                       onClick={() => handleDelete(company.id)}
                     >
-                      Delete
+                      <FaTrash />
                     </button>
-
                   </div>
                 )}
-
               </>
 
             )}
